@@ -67,5 +67,43 @@ namespace UnitedKingdomPostcodeAPI.Controllers
             postcodes.Add(postcode);
             return Ok(postcode);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<PostcodeModel>>> UpdatePostcode(int id, PostcodeModel updatedPostcode)
+        {
+            var postcode = postcodes.Find(x => x.Id == id);
+
+            if (postcode == null)
+            {
+                return NotFound("Failed to update postcode - does not exist");
+            }
+
+            postcode.Postcode = updatedPostcode.Postcode;
+            postcode.Eastings = updatedPostcode.Eastings;
+            postcode.Northings = updatedPostcode.Northings;
+            postcode.Longitude = updatedPostcode.Longitude;
+            postcode.Latitude = updatedPostcode.Latitude;
+            postcode.Town = updatedPostcode.Town;
+            postcode.Region = updatedPostcode.Region;
+            postcode.UkRegion = updatedPostcode.UkRegion;
+            postcode.Country = updatedPostcode.Country;
+            postcode.CountryString = updatedPostcode.CountryString;
+
+            return Ok(postcodes);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<PostcodeModel>>> DeletePostcode(int id)
+        {
+            var postcode = postcodes.Find(x => x.Id == id);
+
+            if (postcode == null)
+            {
+                return NotFound("Failed to delete postcode - does not exist");
+            }
+
+            postcodes.Remove(postcode);
+            return Ok(postcodes);
+        }
     }
 }
