@@ -1,15 +1,28 @@
-﻿using UnitedKingdomPostcodeAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using UnitedKingdomPostcodeAPI.Data;
+using UnitedKingdomPostcodeAPI.Models;
 
 namespace UnitedKingdomPostcodeAPI.Services
 {
     public class PostcodeService : IPostcodeService
     {
-        private static List<PostcodeModel> postcodes = PopulateData();
+        private readonly DataContext _context;
 
-        public static List<PostcodeModel> PopulateData()
+        public PostcodeService(DataContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<PostcodeModel>> AddPostcode(PostcodeModel postcode)
+        {
+            _context.Postcodes.Add(postcode);
+            await _context.SaveChangesAsync();
+            return await _context.Postcodes.ToListAsync();
+        }
+
+        public async Task<List<PostcodeModel>> PrePopulatePostcodes()
         {
             var postcodes = new List<PostcodeModel>();
-
             using (var reader = new StreamReader(@"C:\Users\ryan\source\repos\UnitedKingdomPostcodeAPI\UnitedKingdomPostcodeAPI\postcodedata.csv"))
             {
                 while (!reader.EndOfStream)
@@ -30,40 +43,36 @@ namespace UnitedKingdomPostcodeAPI.Services
                     postcodeEntry.Country = values[8];
                     postcodeEntry.CountryString = values[9];
 
-                    postcodes.Add(postcodeEntry);
-
+                    _context.Postcodes.Add(postcodeEntry);
                 }
             }
-
-            return postcodes;
-        }
-        public List<PostcodeModel> AddPostcode(PostcodeModel postcode)
-        {
-            postcodes.Add(postcode);
-            return postcodes;
+            await _context.SaveChangesAsync();
+            return await _context.Postcodes.ToListAsync();
         }
 
-        public List<PostcodeModel>? DeletePostcode(int id)
+        public async Task<List<PostcodeModel>?> DeletePostcode(int id)
         {
-            var postcode = postcodes.Find(x => x.Id == id);
+            var postcode = await _context.Postcodes.FindAsync(id);
 
             if (postcode is null)
             {
                 return null;
             }
 
-            postcodes.Remove(postcode);
+            _context.Postcodes.Remove(postcode);
+            await _context.SaveChangesAsync();
+            return await _context.Postcodes.ToListAsync();
+        }
+
+        public async Task<List<PostcodeModel>> GetAllPostcodes()
+        {
+            var postcodes = await _context.Postcodes.ToListAsync();
             return postcodes;
         }
 
-        public List<PostcodeModel> GetAllPostcodes()
+        public async Task<PostcodeModel?> GetSingularPostcode(int id)
         {
-            return postcodes;
-        }
-
-        public PostcodeModel? GetSingularPostcode(int id)
-        {
-            var postcode = postcodes.Find(x => x.Id == id);
+            var postcode = await _context.Postcodes.FindAsync(id);
             if (postcode is null)
             {
                 return null;
@@ -71,9 +80,9 @@ namespace UnitedKingdomPostcodeAPI.Services
             return postcode;
         }
 
-        public List<PostcodeModel>? UpdatePostcode(int id, PostcodeModel updatedPostcode)
+        public async Task<List<PostcodeModel>?> UpdatePostcode(int id, PostcodeModel updatedPostcode)
         {
-            var postcode = postcodes.Find(x => x.Id == id);
+            var postcode = await _context.Postcodes.FindAsync(id);
 
             if (postcode == null)
             {
@@ -91,7 +100,9 @@ namespace UnitedKingdomPostcodeAPI.Services
             postcode.Country = updatedPostcode.Country;
             postcode.CountryString = updatedPostcode.CountryString;
 
-            return postcodes;
+            await _context.SaveChangesAsync();
+
+            return await _context.Postcodes.ToListAsync();
         }
     }
 }

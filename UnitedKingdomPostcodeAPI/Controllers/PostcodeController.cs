@@ -20,26 +20,39 @@ namespace UnitedKingdomPostcodeAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PostcodeModel>>> GetAllPostcodes()
         {
-            return _postcodeService.GetAllPostcodes();
+            return await _postcodeService.GetAllPostcodes();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PostcodeModel>> GetSingularPostcode(int id)
         {
-            return _postcodeService.GetSingularPostcode(id);
+            var result = await _postcodeService.GetSingularPostcode(id);
+            if (result is null)
+            {
+                return NotFound("Postcode not found");
+            }
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<List<PostcodeModel>>> AddPostcode(PostcodeModel postcode)
         {
-            var result = _postcodeService.AddPostcode(postcode);
+            var result = await _postcodeService.AddPostcode(postcode);
             return Ok(result);
         }
+
+        //[HttpPost]
+        //[Route("prepopulate")]
+        //public async Task<ActionResult<List<PostcodeModel>>> PrePopulateDb()
+        //{
+        //    var result = await _postcodeService.PrePopulatePostcodes();
+        //    return Ok(result);
+        //}
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<PostcodeModel>>> UpdatePostcode(int id, PostcodeModel updatedPostcode)
         {
-            var result = _postcodeService.UpdatePostcode(id, updatedPostcode);
+            var result = await _postcodeService.UpdatePostcode(id, updatedPostcode);
             if(result is null)
             {
                 return NotFound("Postcode not found");
@@ -50,12 +63,15 @@ namespace UnitedKingdomPostcodeAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<PostcodeModel>>> DeletePostcode(int id)
         {
-            var result = _postcodeService.DeletePostcode(id);
+            var result = await _postcodeService.DeletePostcode(id);
             if (result is null)
             {
                 return NotFound("Postcode does not exist");
             }
             return Ok(result);
         }
+
+
+
     }
 }

@@ -1,4 +1,6 @@
+using UnitedKingdomPostcodeAPI.Models;
 using UnitedKingdomPostcodeAPI.Services;
+using UnitedKingdomPostcodeAPI.Data;
 
 namespace UnitedKingdomPostcodeAPI
 {
@@ -15,6 +17,7 @@ namespace UnitedKingdomPostcodeAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IPostcodeService, PostcodeService>();
+            builder.Services.AddDbContext<DataContext>();
 
             var app = builder.Build();
 

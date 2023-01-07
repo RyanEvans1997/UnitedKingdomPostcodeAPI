@@ -4,14 +4,16 @@ namespace UnitedKingdomPostcodeAPI.Services
 {
     public interface IPostcodeService
     {
-        List<PostcodeModel> GetAllPostcodes();
+        Task<List<PostcodeModel>> GetAllPostcodes();
 
-        PostcodeModel? GetSingularPostcode(int id);
+        Task<PostcodeModel?> GetSingularPostcode(int id);
 
-        List<PostcodeModel> AddPostcode(PostcodeModel postcode);
+        Task<List<PostcodeModel>> AddPostcode(PostcodeModel postcode);
 
-        List<PostcodeModel>? UpdatePostcode(int id, PostcodeModel postcode);
+        Task<List<PostcodeModel>> PrePopulatePostcodes();
 
-        List<PostcodeModel>? DeletePostcode(int id);
+        Task<List<PostcodeModel>?> UpdatePostcode(int id, PostcodeModel postcode);
+
+        Task<List<PostcodeModel>?> DeletePostcode(int id);
     }
 }
