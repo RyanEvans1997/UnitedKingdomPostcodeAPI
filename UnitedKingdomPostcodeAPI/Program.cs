@@ -1,6 +1,8 @@
 using UnitedKingdomPostcodeAPI.Models;
 using UnitedKingdomPostcodeAPI.Services;
 using UnitedKingdomPostcodeAPI.Data;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace UnitedKingdomPostcodeAPI
 {
@@ -16,8 +18,10 @@ namespace UnitedKingdomPostcodeAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHealthChecks().AddSqlServer(builder.Configuration.GetConnectionString("Default")!);
             builder.Services.AddScoped<IPostcodeService, PostcodeService>();
             builder.Services.AddDbContext<DataContext>();
+            builder.Services.AddHealthChecksUI().AddInMemoryStorage();
 
             var app = builder.Build();
 
@@ -34,6 +38,17 @@ namespace UnitedKingdomPostcodeAPI
 
 
             app.MapControllers();
+
+            app.MapHealthChecks("/healthcheck", new HealthCheckOptions
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            //app.MapHealthChecks("/healthcheck");
+
+            app.MapHealthChecksUI();
+
+
 
             app.Run();
         }
