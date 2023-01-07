@@ -24,9 +24,9 @@ namespace UnitedKingdomPostcodeAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<PostcodeModel>>> GetSingularPostcode(int id)
+        public async Task<ActionResult<PostcodeModel>> GetSingularPostcode(int id)
         {
-
+            return _postcodeService.GetSingularPostcode(id);
         }
 
         [HttpPost]
