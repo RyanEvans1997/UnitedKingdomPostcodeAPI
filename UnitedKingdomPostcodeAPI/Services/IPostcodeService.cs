@@ -6,12 +6,12 @@ namespace UnitedKingdomPostcodeAPI.Services
     {
         List<PostcodeModel> GetAllPostcodes();
 
-        PostcodeModel GetSingularPostcode(int id);
+        PostcodeModel? GetSingularPostcode(int id);
 
         List<PostcodeModel> AddPostcode(PostcodeModel postcode);
 
-        List<PostcodeModel> UpdatePostcode(int id, PostcodeModel postcode);
+        List<PostcodeModel>? UpdatePostcode(int id, PostcodeModel postcode);
 
-        List<PostcodeModel> DeletePostcode(int id);
+        List<PostcodeModel>? DeletePostcode(int id);
     }
 }

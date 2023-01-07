@@ -1,3 +1,4 @@
+using UnitedKingdomPostcodeAPI.Services;
 
 namespace UnitedKingdomPostcodeAPI
 {
@@ -13,6 +14,7 @@ namespace UnitedKingdomPostcodeAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IPostcodeService, PostcodeService>();
 
             var app = builder.Build();
 
