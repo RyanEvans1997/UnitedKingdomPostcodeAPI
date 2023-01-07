@@ -4,9 +4,10 @@ using Microsoft.Extensions.Hosting;
 using UnitedKingdomPostcodeAPI.Models;
 using UnitedKingdomPostcodeAPI.Services;
 
-namespace UnitedKingdomPostcodeAPI.Controllers
+namespace UnitedKingdomPostcodeAPI.Controllers.v1
 {
     [Route("api/[controller]")]
+    [ApiVersion("1.0")]
     [ApiController]
     public class PostcodeController : ControllerBase
     {
@@ -14,7 +15,7 @@ namespace UnitedKingdomPostcodeAPI.Controllers
 
         public PostcodeController(IPostcodeService postcodeService)
         {
-            this._postcodeService = postcodeService;
+            _postcodeService = postcodeService;
         }
 
         [HttpGet]
@@ -53,7 +54,7 @@ namespace UnitedKingdomPostcodeAPI.Controllers
         public async Task<ActionResult<List<PostcodeModel>>> UpdatePostcode(int id, PostcodeModel updatedPostcode)
         {
             var result = await _postcodeService.UpdatePostcode(id, updatedPostcode);
-            if(result is null)
+            if (result is null)
             {
                 return NotFound("Postcode not found");
             }
