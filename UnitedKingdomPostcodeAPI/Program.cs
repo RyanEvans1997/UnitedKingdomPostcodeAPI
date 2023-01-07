@@ -44,11 +44,7 @@ namespace UnitedKingdomPostcodeAPI
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
 
-            //app.MapHealthChecks("/healthcheck");
-
             app.MapHealthChecksUI();
-
-
 
             app.Run();
         }
